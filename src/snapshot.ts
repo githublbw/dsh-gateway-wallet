@@ -353,14 +353,15 @@ export function listRouteAccounts(ctx: Context): RouteAccount[] {
     settingsNs: string
     settingsPath?: string[]
   }> } | undefined
-  const settings = ctx.get('settings') as { get?: (ns: string) => unknown } | undefined
-  if (llm?.listConfigurableProviders === undefined || settings?.get === undefined) return []
+  const settings = ctx.get('settings') as { describe?: () => Array<{ ns: string; value: unknown }> } | undefined
+  if (llm?.listConfigurableProviders === undefined || settings?.describe === undefined) return []
+  const sections = new Map<string, unknown>(settings.describe().map(row => [row.ns, row.value] as [string, unknown]))
 
   const out: RouteAccount[] = []
   for (const entry of llm.listConfigurableProviders()) {
     let profile: unknown
     try {
-      profile = readAt(settings.get(entry.settingsNs), entry.settingsPath ?? [])
+      profile = readAt(sections.get(entry.settingsNs), entry.settingsPath ?? [])
     } catch {
       profile = undefined
     }
@@ -384,8 +385,8 @@ export function listRouteAccounts(ctx: Context): RouteAccount[] {
 export function currentAccount(ctx: Context): RouteAccount | undefined {
   const accounts = listRouteAccounts(ctx)
   if (accounts.length === 0) return undefined
-  const settings = ctx.get('settings') as { get?: (ns: string) => unknown } | undefined
-  const defaults = settings?.get?.('agent-default-model') as { provider?: string; model?: string } | undefined
+  const settings = ctx.get('settings') as { describe?: () => Array<{ ns: string; value: unknown }> } | undefined
+  const defaults = settings?.describe?.().find(row => row.ns === 'agent-default-model')?.value as { provider?: string; model?: string } | undefined
   const hit = defaults?.provider !== undefined
     ? accounts.find(account => account.route === defaults.provider)
     : undefined

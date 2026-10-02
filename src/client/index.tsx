@@ -2,13 +2,13 @@
  * 侧边栏左下角入口：与「用量账本」同槽，点击弹出站点真实账本。
  */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
+import type { Context as ClientContext } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
 import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import {
-  IconApiOutline14,
-  IconCloseOutline16,
-  IconRefreshOutline14,
+  IconApiOutlineRegular,
+  IconCloseOutlineRegular,
+  IconRefreshOutlineRegular,
   useDismissOnOutsidePointer,
 } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { AccountListItem, Money, TokenBuckets, WalletBundle, WalletError, WalletPayload, WalletSnapshot } from '../shared.ts'
@@ -608,7 +608,7 @@ function WalletSeat({ wide, useSessions }: SeatProps) {
         onClick={() => setOpen(value => !value)}
       >
         <span className="gww_badgeIcon">
-          <IconApiOutline14 size={wide === false ? 18 : 14} />
+          <IconApiOutlineRegular size={wide === false ? 18 : 14} />
           {low && <span className="gww_dot" aria-hidden="true" />}
         </span>
         <span className="gww_badgeLabel">站点余额</span>
@@ -631,7 +631,7 @@ function WalletSeat({ wide, useSessions }: SeatProps) {
                 aria-label="刷新"
                 onClick={reload}
               >
-                <IconRefreshOutline14 size={14} />
+                <IconRefreshOutlineRegular size={14} />
               </button>
               <button
                 type="button"
@@ -639,7 +639,7 @@ function WalletSeat({ wide, useSessions }: SeatProps) {
                 aria-label="关闭"
                 onClick={() => setOpen(false)}
               >
-                <IconCloseOutline16 size={16} />
+                <IconCloseOutlineRegular size={16} />
               </button>
             </div>
           </div>
